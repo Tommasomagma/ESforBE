@@ -1,6 +1,5 @@
 from openai import OpenAI
 
-
 def gptEs(imageUrl, problemDescription, correctAnswer, userAnswer, hint):
 
     #I will give you the code separately
@@ -52,9 +51,9 @@ def gptEs(imageUrl, problemDescription, correctAnswer, userAnswer, hint):
             )
 
         # Extract the classification from the response
-        label = response.choices[0].message.content.strip()
+        index = response.choices[0].message.content.strip()
 
     except Exception as e:
         return -1
 
-    return label
+    return index
