@@ -1,6 +1,8 @@
 from openai import OpenAI
+import base64
+from io import BytesIO
 
-def gptEs(imageUrl, problemDescription, correctAnswer, userAnswer, hint):
+def gptEs(image, problemDescription, correctAnswer, userAnswer, hint):
 
     #I will give you the code separately
     try:
@@ -23,6 +25,13 @@ def gptEs(imageUrl, problemDescription, correctAnswer, userAnswer, hint):
             f"""The problem description is {problemDescription} to which the correct answer is: {correctAnswer}. The student's hand-written solution can be seen in the Image.
             The incorrect answer they submitted is: {userAnswer}. The hint you should map to a part of the solution is: {hint}."""
         )
+
+        if image.mode == "RGBA":
+            image = image.convert("RGB")
+        buffered = BytesIO()
+        image.save(buffered, format="JPEG")  # or "PNG", depending on the image
+        base64Image = base64.b64encode(buffered.getvalue()).decode("utf-8")
+        imageUrl = f"data:image/jpeg;base64,{base64Image}"  # Change MIME if needed
 
         # Prepare the input for OpenAI API with both text and image 
         response = client.chat.completions.create(
